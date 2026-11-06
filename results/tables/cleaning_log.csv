@@ -1,0 +1,18 @@
+﻿dataset,step,detail,n_rows_after
+concrete,beolvasás,"'Original Data' munkalap, 8 magyarázó + 1 célváltozó",1030
+concrete,duplikátumok,25 teljesen azonos sor törölve,1005
+concrete,hiányzó értékek,"0 db, nincs teendő",1005
+concrete,transzformáció,Age -> ln(Age) a ferdeség miatt,1005
+fat,beolvasás,14 magyarázó + 1 célváltozó (Fat),252
+fat,hibás magasság javítása,sor 41: 29.5 -> 69.5 hüvelyk (BMI-ből visszaszámolva),252
+fat,lehetetlen célérték,1 sor törölve (Fat = 0%),251
+fat,mértékegység,"Weight lbs->kg, Height inch->cm",251
+ess,beolvasás,15 oszlop,1849
+ess,célváltozó,"83 'Unknown' válasz törölve, Yes=1/No=0",1766
+ess,tökéletes kollinearitás,County törölve (Region-be ágyazott),1766
+ess,Education_Years,7 db >25 év érvénytelen; 18 hiányzó medián (12.0)-nal pótolva,1766
+ess,WeeklyWork_Hours,hiányzó -> 0 + Employed indikátor; 8 db >100 óra 100-ra vágva,1766
+ess,NetUsePerDay_Minutes,hiányzó -> 0 + InternetUser indikátor,1766
+ess,PoliticalRadioTVPerDay_Minutes,46 hiányzó medián (30.0)-nal pótolva,1766
+ess,transzformáció,percben mért változók -> ln(1+x),1766
+ess,dummy-kódolás,"Yes/Unknown (ref: No), párt (ref: Nem Ismert), régió (ref: Budapest)",1766
