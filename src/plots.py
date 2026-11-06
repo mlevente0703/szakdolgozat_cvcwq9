@@ -8,6 +8,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib.ticker
 import numpy as np
 import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap
@@ -20,6 +21,7 @@ METHOD_COLORS = {"PCA": "#2a78d6", "MDS": "#eb6834", "t-SNE": "#1baf7a", "Autoen
 REF_COLOR = "#8a8984"
 INK, INK2, GRID = "#0b0b0b", "#52514e", "#e4e3df"
 SEQ = LinearSegmentedColormap.from_list("seq_blue", ["#9ec5f4", "#5598e7", "#2a78d6", "#1c5cab", "#0d366b"])
+SEQ_HEAT = LinearSegmentedColormap.from_list("heat_blue", ["#f4f8fd", "#9ec5f4", "#2a78d6", "#0d366b"])
 DS_LABEL = {"concrete": "Concrete (beton)", "fat": "FAT (testzsír)", "ess": "ESS2020"}
 TARGET_LABEL = {"concrete": "Nyomószilárdság (MPa)", "fat": "Testzsír (%)", "ess": "Beoltatná magát"}
 
@@ -105,13 +107,13 @@ def correlation_heatmaps(res):
             mats.append((m, np.abs(np.corrcoef(H, rowvar=False))))
         fig, axes = plt.subplots(1, 5, figsize=(14, 3.2), gridspec_kw={"width_ratios": [1.6, 1, 1, 1, 1]})
         for ax, (title, M) in zip(axes, mats):
-            im = ax.imshow(M, cmap=SEQ, vmin=0, vmax=1)
+            im = ax.imshow(M, cmap=SEQ_HEAT, vmin=0, vmax=1)
             ax.set_title(title, loc="left", color=METHOD_COLORS.get(title, INK),
                          fontweight="bold" if title in METHOD_COLORS else "normal")
             ax.set_xticks([]); ax.set_yticks([]); ax.grid(False)
         cb = fig.colorbar(im, ax=axes, fraction=0.015, pad=0.01)
         cb.set_label("|r|"); cb.outline.set_visible(False)
-        fig.suptitle(f"{DS_LABEL[ds]}: abszolút korrelációs mátrixok (q = {q})", x=0.01, ha="left",
+        fig.suptitle(f"{DS_LABEL[ds]}: abszolút korrelációs mátrixok (q = {q})", x=0.01, y=1.08, ha="left",
                      color=INK, fontsize=11)
         _save(fig, f"corr_heatmaps_{ds}.png")
 
@@ -127,16 +129,22 @@ def _dot_panel(ax, sub, col, ref, title, xlabel, log=False, err=None):
         ax.scatter(v, yp, s=70, color=METHOD_COLORS[m], edgecolor="white", linewidth=2, zorder=3)
         ax.annotate(f"{v:.3g}", (v, yp), xytext=(0, 8), textcoords="offset points", ha="center",
                     fontsize=8, color=INK2)
+    if log:
+        ax.set_xscale("log")
+        ax.xaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter("%g"))
+        ax.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
     if ref is not None and not np.isnan(ref):
         ax.axvline(ref, color=REF_COLOR, lw=1.5, ls="--")
-        ax.annotate(f"eredeti: {ref:.3g} ", (ref, ypos.max() + 0.55), ha="right", fontsize=8, color=INK2,
-                    annotation_clip=False)
+        lo, hi = ax.get_xlim()
+        frac = ((np.log10(ref) - np.log10(lo)) / (np.log10(hi) - np.log10(lo)) if log
+                else (ref - lo) / (hi - lo))
+        left_side = frac > 0.5
+        ax.annotate(f" eredeti: {ref:.3g} " , (ref, ypos.max() + 0.55), ha="right" if left_side else "left",
+                    fontsize=8, color=INK2, annotation_clip=False)
     ax.set_yticks(ypos, methods)
     ax.set_ylim(-0.6, len(methods) - 0.2)
     ax.set_title(title, loc="left")
     ax.set_xlabel(xlabel)
-    if log:
-        ax.set_xscale("log")
     ax.grid(axis="y", visible=False)
 
 
