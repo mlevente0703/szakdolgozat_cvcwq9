@@ -1,0 +1,7 @@
+{
+  "fit_time_s": 3.0951859999913722,
+  "kl_divergence": 0.5200862884521484,
+  "method": "barnes_hut",
+  "perplexity": 30,
+  "n_iter": 999
+}

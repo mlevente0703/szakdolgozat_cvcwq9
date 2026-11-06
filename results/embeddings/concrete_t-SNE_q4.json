@@ -1,0 +1,7 @@
+{
+  "fit_time_s": 168.95154429995455,
+  "kl_divergence": 0.30317682844432137,
+  "method": "exact",
+  "perplexity": 30,
+  "n_iter": 999
+}
