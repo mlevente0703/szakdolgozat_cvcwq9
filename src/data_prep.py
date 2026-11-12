@@ -22,10 +22,26 @@ def show_overview(name: str, df: pd.DataFrame) -> None:
     print()
 
 
+def show_details(df: pd.DataFrame) -> None:
+    """Hibás értékek felderítése: leíró statisztikák, kategóriák, duplikált sorok."""
+    # Numerikus oszlopok: min / max / átlag stb.
+    print(df.describe().T.round(2))
+    print()
+
+    # Szöveges (kategorikus) oszlopok
+    for col in df.select_dtypes(exclude="number").columns:
+        print(df[col].value_counts().to_dict())
+        print(f"  ^ {col}\n")
+
+    print(f"Duplikált sorok száma: {df.duplicated().sum()}")
+    print()
+
+
 def main() -> None:
     for name in config.DATASETS:
         df = load_raw(name)
         show_overview(name, df)
+        show_details(df)
 
 
 if __name__ == "__main__":
