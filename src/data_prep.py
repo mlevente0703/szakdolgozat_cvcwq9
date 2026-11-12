@@ -166,6 +166,39 @@ def clean_ess() -> pd.DataFrame:
     return df
 
 
+# A tisztított adatok betöltése a modellekhez
+
+def load_dataset(name: str) -> tuple[pd.DataFrame, pd.Series, pd.Series | None]:
+    """Tisztított CSV beolvasása és szétválasztása.
+
+    Vissza: X (magyarázóváltozók), y (célváltozó), groups (csak a Concrete-nél
+    a MixID a csoportos keresztvalidációhoz, máshol None).
+    """
+    info = config.DATASETS[name]
+    df = pd.read_csv(config.PROCESSED_DIR / info["clean"])
+
+    y = df[info["target"]]
+    groups = df[info["groups"]] if info["groups"] else None
+
+    # X = minden más: a célváltozó és a csoportazonosító nem magyarázóváltozó
+    drop = [info["target"]] + ([info["groups"]] if info["groups"] else [])
+    X = df.drop(columns=drop)
+
+    return X, y, groups
+
+
+# Diagnosztika
+
+def kaiser_q(X) -> int:
+    """Kaiser-kritérium: a korrelációs mátrix 1-nél nagyobb sajátértékeinek száma.
+
+    Legalább 2, hogy minden eljárás ugyanannyi (és ábrázolható számú) dimenziót kapjon.
+    """
+    corr = np.corrcoef(np.asarray(X, dtype=float), rowvar=False)
+    eigenvalues = np.linalg.eigvalsh(corr)
+    return max(2, int((eigenvalues > 1).sum()))
+
+
 def main() -> None:
     """Mindhárom adatbázis tisztítása és mentése: data/processed/*.csv"""
     config.PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
