@@ -1,0 +1,2 @@
+# szakdolgozat_cvcwq9
+Dimenziócsökkentő algoritmusok empirikus hatékonyságvizsgálata multikollinearitás kezelésében
