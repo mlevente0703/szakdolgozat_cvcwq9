@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-from src import data_prep
+from src import config, data_prep
 
 
 def standardize(X) -> np.ndarray:
@@ -46,3 +46,10 @@ def main(name: str = "fat") -> None:
     max_r = np.abs(corr - np.eye(q)).max()
     print(f"\nLegnagyobb |r| a főkomponensek között: {max_r:.1e}  (0 = korrelálatlanok)")
 
+    path = data_prep.save_embedding(H, name, "PCA")
+    print(f"Mentve: {path.relative_to(config.ROOT)}")
+
+
+
+if __name__ == "__main__":
+    main(sys.argv[1] if len(sys.argv) > 1 else "fat")

@@ -187,6 +187,20 @@ def load_dataset(name: str) -> tuple[pd.DataFrame, pd.Series, pd.Series | None]:
     return X, y, groups
 
 
+def save_embedding(H: np.ndarray, name: str, method: str):
+    """Egy módszer beágyazásának mentése: results/embeddings/<adatbázis>_<módszer>_q<q>.csv
+
+    A sorok sorrendje megegyezik a tisztított CSV-ével, így később a célváltozóval
+    és a többi módszer beágyazásával soronként összepárosítható.
+    """
+    config.EMBEDDING_DIR.mkdir(parents=True, exist_ok=True)
+    q = H.shape[1]
+    path = config.EMBEDDING_DIR / f"{name}_{method}_q{q}.csv"
+    columns = [f"{method}_{i}" for i in range(1, q + 1)]
+    pd.DataFrame(H, columns=columns).to_csv(path, index=False)
+    return path
+
+
 # Diagnosztika
 
 def kaiser_q(X) -> int:

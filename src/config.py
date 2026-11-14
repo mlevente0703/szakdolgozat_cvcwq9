@@ -4,6 +4,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
 PROCESSED_DIR = ROOT / "data" / "processed"
+EMBEDDING_DIR = ROOT / "results" / "embeddings"   # a módszerek kimenete (n x q koordináták)
+
+# --- Reprodukálhatóság ---
+RANDOM_STATE = 42
 
 # --- Adatbázisok ---
 # groups: csoportazonosító oszlop a csoportos keresztvalidációhoz (nem magyarázóváltozó)
@@ -15,3 +19,7 @@ DATASETS = {
     "ess":      {"raw": "ESS2020.xlsx", "clean": "ess_clean.csv",
                  "target": "GetVaccine", "groups": None},
 }
+
+# --- MDS ---
+MDS_N_INIT = 4          # véletlen kezdőkonfigurációk száma, a legkisebb stresszű marad
+MDS_MAX_ITER = 300      # SMACOF-iterációk felső korlátja
