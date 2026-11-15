@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sklearn.preprocessing import StandardScaler
 
 from src import config
 
@@ -185,6 +186,13 @@ def load_dataset(name: str) -> tuple[pd.DataFrame, pd.Series, pd.Series | None]:
     X = df.drop(columns=drop)
 
     return X, y, groups
+
+
+def standardize(X) -> np.ndarray:
+    """Nulla átlag, egységnyi szórás minden oszlopban.
+    Így a mértékegységek nem számítanak.
+    """
+    return StandardScaler().fit_transform(X)
 
 
 def save_embedding(H: np.ndarray, name: str, method: str):

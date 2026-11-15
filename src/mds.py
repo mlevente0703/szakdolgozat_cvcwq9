@@ -5,7 +5,6 @@ import numpy as np
 from sklearn.manifold import MDS
 
 from src import config, data_prep
-from src.pca import standardize
 
 
 def fit_mds(Z: np.ndarray, q: int):
@@ -26,7 +25,7 @@ def main(name: str = "fat") -> None:
     Futtatás:  python -m src.mds fat (vagy: concrete, ess)
     """
     X, _, _ = data_prep.load_dataset(name)   # y és groups itt nem kell
-    Z = standardize(X)
+    Z = data_prep.standardize(X)
     q = data_prep.kaiser_q(X)
 
     t0 = time.perf_counter()

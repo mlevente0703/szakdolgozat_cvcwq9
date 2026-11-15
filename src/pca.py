@@ -2,16 +2,8 @@ import sys
 
 import numpy as np
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
 
 from src import config, data_prep
-
-
-def standardize(X) -> np.ndarray:
-    """Nulla átlag, egységnyi szórás minden oszlopban.
-    Így a mértékegységek nem számítanak.
-    """
-    return StandardScaler().fit_transform(X)
 
 
 def fit_pca(Z: np.ndarray, q: int):
@@ -32,7 +24,7 @@ def main(name: str = "fat") -> None:
     Futtatás:  python -m src.pca fat (vagy: concrete, ess)
     """
     X, _, _ = data_prep.load_dataset(name)   # y és groups itt nem kell
-    Z = standardize(X)
+    Z = data_prep.standardize(X)
     q = data_prep.kaiser_q(X)
     H, model = fit_pca(Z, q)
 
