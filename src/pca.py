@@ -10,8 +10,7 @@ def fit_pca(Z: np.ndarray, q: int):
     """A Z korrelációs mátrixának q legnagyobb sajátértékéhez tartozó sajátvektorokra
     vetít (szinguláris felbontással számolva). A főkomponensek korrelálatlanok.
 
-    Vissza: (beágyazás n x q, illesztett modell). A modell .transform()-ja kell
-    majd az induktív keresztvalidációhoz (új megfigyelések leképezése).
+    Vissza: (beágyazás n x q, illesztett modell).
     """
     model = PCA(n_components=q, svd_solver="full")
     H = model.fit_transform(Z)

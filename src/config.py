@@ -5,20 +5,24 @@ ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
 PROCESSED_DIR = ROOT / "data" / "processed"
 EMBEDDING_DIR = ROOT / "results" / "embeddings"   # a módszerek kimenete (n x q koordináták)
+TABLE_DIR = ROOT / "results" / "tables"           # az összehasonlítás táblázatai
 
 # --- Reprodukálhatóság ---
 RANDOM_STATE = 42
 
 # --- Adatbázisok ---
-# groups: csoportazonosító oszlop a csoportos keresztvalidációhoz (nem magyarázóváltozó)
+# groups: csoportazonosító oszlop (nem magyarázóváltozó, a load_dataset kiveszi X-ből)
+# task: "regression" -> OLS, "classification" -> logisztikus regresszió
 DATASETS = {
     "concrete": {"raw": "Concrete_Data.xlsx", "clean": "concrete_clean.csv",
-                 "target": "CompressiveStrength", "groups": "MixID"},
+                 "target": "CompressiveStrength", "groups": "MixID", "task": "regression"},
     "fat":      {"raw": "FAT_Data.xlsx", "clean": "fat_clean.csv",
-                 "target": "BodyFat", "groups": None},
+                 "target": "BodyFat", "groups": None, "task": "regression"},
     "ess":      {"raw": "ESS2020.xlsx", "clean": "ess_clean.csv",
-                 "target": "GetVaccine", "groups": None},
+                 "target": "GetVaccine", "groups": None, "task": "classification"},
 }
+
+METHODS = ["PCA", "MDS", "t-SNE", "Autoencoder"]
 
 # --- MDS ---
 MDS_N_INIT = 4          # véletlen kezdőkonfigurációk száma, a legkisebb stresszű marad

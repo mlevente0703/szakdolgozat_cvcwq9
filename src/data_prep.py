@@ -50,7 +50,7 @@ def clean_concrete() -> pd.DataFrame:
     df = df.drop_duplicates().reset_index(drop=True)
 
     # Keverékazonosító: azonos összetétel = azonos MixID (428 keverék).
-    # Nem magyarázóváltozó, csak a csoportos keresztvalidációhoz kell.
+    # Nem magyarázóváltozó, a load_dataset kiveszi X-ből.
 
     components = ["Cement", "BlastFurnaceSlag", "FlyAsh", "Water", "Superplasticizer",
                   "CoarseAggregate", "FineAggregate"]
@@ -173,7 +173,7 @@ def load_dataset(name: str) -> tuple[pd.DataFrame, pd.Series, pd.Series | None]:
     """Tisztított CSV beolvasása és szétválasztása.
 
     Vissza: X (magyarázóváltozók), y (célváltozó), groups (csak a Concrete-nél
-    a MixID a csoportos keresztvalidációhoz, máshol None).
+    a MixID keverékazonosító, máshol None).
     """
     info = config.DATASETS[name]
     df = pd.read_csv(config.PROCESSED_DIR / info["clean"])
@@ -207,6 +207,12 @@ def save_embedding(H: np.ndarray, name: str, method: str):
     columns = [f"{method}_{i}" for i in range(1, q + 1)]
     pd.DataFrame(H, columns=columns).to_csv(path, index=False)
     return path
+
+
+def load_embedding(name: str, method: str, q: int) -> np.ndarray:
+    """A save_embedding által mentett beágyazás visszaolvasása (n x q)."""
+    path = config.EMBEDDING_DIR / f"{name}_{method}_q{q}.csv"
+    return pd.read_csv(path).to_numpy()
 
 
 # Diagnosztika
