@@ -1,5 +1,4 @@
 import sys
-import time
 
 import numpy as np
 from sklearn.manifold import MDS
@@ -28,12 +27,10 @@ def main(name: str = "fat") -> None:
     Z = data_prep.standardize(X)
     q = data_prep.kaiser_q(X)
 
-    t0 = time.perf_counter()
     H, model = fit_mds(Z, q)
-    fit_time = time.perf_counter() - t0
 
     print(f"Adatbázis: {name}   X: {X.shape}   Kaiser-q: {q}   H: {H.shape}")
-    print(f"Illesztési idő: {fit_time:.1f} s   iterációk: {model.n_iter_} / {config.MDS_MAX_ITER}")
+    print(f"Iterációk: {model.n_iter_} / {config.MDS_MAX_ITER}")
 
     path = data_prep.save_embedding(H, name, "MDS")
     print(f"Mentve: {path.relative_to(config.ROOT)}")

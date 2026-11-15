@@ -23,3 +23,7 @@ DATASETS = {
 # --- MDS ---
 MDS_N_INIT = 4          # véletlen kezdőkonfigurációk száma, a legkisebb stresszű marad
 MDS_MAX_ITER = 300      # SMACOF-iterációk felső korlátja
+
+# --- t-SNE ---
+TSNE_PERPLEXITY = 30    # kb. ennyi szomszédot vesz figyelembe egy megfigyelés
+TSNE_MAX_ITER = 1000    # gradiens-iterációk felső korlátja
