@@ -6,6 +6,7 @@ RAW_DIR = ROOT / "data" / "raw"
 PROCESSED_DIR = ROOT / "data" / "processed"
 EMBEDDING_DIR = ROOT / "results" / "embeddings"   # a módszerek kimenete (n x q koordináták)
 TABLE_DIR = ROOT / "results" / "tables"           # az összehasonlítás táblázatai
+FIGURE_DIR = ROOT / "results" / "figures"         # a szakdolgozat ábrái (PNG, 300 dpi)
 
 # --- Reprodukálhatóság ---
 RANDOM_STATE = 42
